@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">QuickNews</string>
+    <string name="firstPage">首页</string>
+    <string name="videoPage">视频</string>
+    <string name="carePage">关心</string>
+    <string name="myPage">我的</string>
+
+    <string name="search">搜索</string>
+    <string name="popular_comment">神评论</string>
+
+    <string-array name="home_tab_title_list">
+        <item>推荐</item>
+        <item>热点</item>
+        <item>视频</item>
+        <item>社会</item>
+        <item>段子</item>
+        <item>图片</item>
+        <item>娱乐</item>
+        <item>科技</item>
+    </string-array>
+    <string-array name="video_tab_title_list">
+        <item>全部</item>
+        <item>逗比剧</item>
+        <item>好声音</item>
+        <item>看天下</item>
+        <item>小品</item>
+        <item>掠影</item>
+        <item>最娱乐</item>
+    </string-array>
+</resources>
