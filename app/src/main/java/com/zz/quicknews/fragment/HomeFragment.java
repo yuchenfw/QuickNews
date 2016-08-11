@@ -179,13 +179,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
         View view = mViewList.get(0);
         final ListView listView = (ListView) view.findViewById(R.id.lvNewsList);
         requestQueue.add(getNewsData("http://toutiao.com/api/article/recent/?source=2&category=video" +
-                "&as=A165472AB9D6F61&cp=57A9B60F76914E1&_=1470721889136", "", listView));
+                "&as=A165472AB9D6F61" , "", listView));
         final SwipeRefreshLayout refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srRefresh);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                requestQueue.add(getNewsData("http://toutiao.com/api/article/recent/?source=2" +
-                                "&category=video&as=A165472AB9D6F61&cp=57A9B60F76914E1&_=1470721889136"
+                requestQueue.add(getNewsData("http://toutiao.com/api/article/recent/?source=2&category=video" +
+                                "&as=A165472AB9D6F61"
                         , "", listView, refreshLayout));
             }
         });
@@ -236,46 +236,39 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
         String url = null;
         if (position == 4) {//段子的内容与其他不一样，单独处理
             url = "http://toutiao.com/api/article/recent/" +
-                    "?source=2&category=essay_joke&as=A1B5276908B3CCE&cp=579853DC9CEE1E1" +
-                    "&_=1469594830019";
+                    "?source=2&category=essay_joke&as=A1B5276908B3CCE" ;
             requestQueue.add(getJokeData(url, "", listView, refreshLayout));
         } else {
             switch (position) {
                 case 0:
                     url = "http://toutiao.com/api/article/recent/" +
-                            "?source=2&category=__all__&as=A105177907376A5" +
-                            "&cp=5797C7865AD54E1";
+                            "?source=2&category=__all__&as=A105177907376A5" ;
                     break;
                 case 1:
                     url = "http://toutiao.com/api/article/recent/" +
-                            "?source=2&category=news_hot&as=A1B5C75918C3A2C&cp=5798633A120C2E1" +
-                            "&_=1469594155621";
+                            "?source=2&category=news_hot&as=A1B5C75918C3A2C";
                     break;
                 case 2:
                     url = "http://toutiao.com/api/article/recent/" +
-                            "?source=2&category=video&as=A195A71998C3BBD&cp=5798031BABDDEE1" +
-                            "&_=1469594557119";
+                            "?source=2&category=video&as=A195A71998C3BBD" ;
                     break;
                 case 3://社会
                     url = "http://toutiao.com/api/article/recent/" +
-                            "?source=2&category=news_society&as=A145F7D98893D5A&cp=5798C3CDC56AEE1" +
-                            "&_=1469594970323";
+                            "?source=2&category=news_society&as=A145F7D98893D5A";
                     break;
                 case 6://yule
                     url = "http://toutiao.com/api/article/recent/" +
-                            "?source=2&category=news_entertainment&as=A1C507392893DCD&" +
-                            "cp=5798C35D8C0DBE1&_=1469595085737";
+                            "?source=2&category=news_entertainment&as=A1C507392893DCD&";
                     break;
                 case 5://图片
                     url = "http://toutiao.com/api/article/recent/" +
                             "?source=2&count=20&category=gallery_detail&max_behot_time=" +
                             "1469594722.33&utm_source=toutiao&device_platform=web" +
-                            "&offset=0&as=A1D5C7D9E873C62&cp=5798038CA6024E1&_=1469594722760";
+                            "&offset=0&as=A1D5C7D9E873C62";
                     break;
                 case 7:
                     url = "http://toutiao.com/api/article/recent/" +
-                            "?source=2&category=news_tech&as=A1B5373998E3FCB&cp=579853AF4C0BEE1" +
-                            "&_=1469595595502";
+                            "?source=2&category=news_tech&as=A1B5373998E3FCB";
                     break;
 
 
@@ -293,31 +286,31 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
         switch (position) {
             case 0://全部
                 url = "http://toutiao.com/api/article/recent/?source=2&category=video" +
-                        "&as=A165472AB9D6F61&cp=57A9B60F76914E1&_=1470721889136";
+                        "&as=A165472AB9D6F61";
                 break;
             case 1://逗比剧
                 url = "http://toutiao.com/api/article/recent/?source=2&category=subv_funny" +
-                        "&as=A1D507EA5937321&cp=57A9578332C14E1&_=1470722849503";
+                        "&as=A1D507EA5937321";
                 break;
             case 2://好声音
                 url = "http://toutiao.com/api/article/recent/?source=2&category=subv_voice" +
-                        "&as=A17517DA89C7341&cp=57A9C763B4D1BE1&_=1470722881731";
+                        "&as=A17517DA89C7341";
                 break;
             case 3://看天下
                 url = "http://toutiao.com/api/article/recent/?source=2&category=subv_society" +
-                        "&as=A135F7CAF987379&cp=57A9B7E357C95E1&_=1470722937023";
+                        "&as=A135F7CAF987379";
                 break;
             case 4://小品
                 url = "http://toutiao.com/api/article/recent/?source=2&category=subv_comedy" +
-                        "&as=A175777A09F73B7&cp=57A9D7537BD7BE1&_=1470722999645";
+                        "&as=A175777A09F73B7";
                 break;
             case 5://掠影
                 url = "http://toutiao.com/api/article/recent/?source=2&category=subv_movie" +
-                        "&as=A1D527BAD9973D2&cp=57A9F7637D22EE1&_=1470723026058";
+                        "&as=A1D527BAD9973D2";
                 break;
             case 6://最娱乐
                 url = "http://toutiao.com/api/article/recent/?source=2&category=subv_entertainment" +
-                        "&as=A175D7CA09173E7&cp=57A9B7A37EC70E1&_=1470723047320";
+                        "&as=A175D7CA09173E7";
                 break;
 
         }
