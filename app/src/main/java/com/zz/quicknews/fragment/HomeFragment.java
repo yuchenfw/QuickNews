@@ -1,7 +1,12 @@
 package com.zz.quicknews.fragment;
 
 import android.app.Fragment;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -16,6 +21,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 
 import com.android.volley.RequestQueue;
@@ -25,6 +31,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.zz.quicknews.NetWorkState;
 import com.zz.quicknews.activity.NewsActivity;
 import com.zz.quicknews.R;
 import com.zz.quicknews.activity.SearchActivity;
@@ -51,10 +58,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
     private ImageView mIvSearch;
     private List<View> mViewList;
     private static List<News> newsList;
-    private Data data;
-    private int mType;
+    private Data data;//获取数据
+    private int mType;//首页/视频
     private boolean isFirstScroll = true;
     private NewsAdapter mNewsAdapter;
+    private boolean mNetState;//网络状态
+    private NetWorkChangeReceiver mNetReceiver;
+
 
     @Nullable
     @Override
@@ -67,11 +77,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
         if (getArguments() != null) {
             mType = getArguments().getInt("TYPE");
         }
-        if (mType == 0) {
-            showFragment(inflater);
-        } else if (mType == 1) {
-            showVideoFragment(inflater);
+        mNetState= NetWorkState.isConn(getActivity());
+        if (mNetState) {
+            if (mType == 0) {
+                showFragment(inflater);
+            } else if (mType == 1) {
+                showVideoFragment(inflater);
+            }
         }
+        mNetReceiver=new NetWorkChangeReceiver();
+        IntentFilter filter=new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        getActivity().registerReceiver(mNetReceiver,filter);
+
         return view;
     }
 
@@ -82,6 +99,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
         HomeFragment fragment = new HomeFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mNetReceiver!=null){
+            getActivity().unregisterReceiver(mNetReceiver);
+            mNetReceiver=null;
+        }
     }
 
     /*
@@ -103,6 +129,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
         HomePagerAdapter adapter = new HomePagerAdapter(mViewList, tabTitleList);
         mViewPager.setAdapter(adapter);
         View view = mViewList.get(0);
+        //默认首页的展示
         final ListView listView = (ListView) view.findViewById(R.id.lvNewsList);
         requestQueue.add(getNewsData("http://toutiao.com/api/article/recent/" +
                 "?source=2&category=__all__&as=A1C5D7A9962A7C9&cp=57967A97AC793E1", "", listView));
@@ -114,12 +141,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
                                 "?source=2&category=__all__&as=A105177907376A5" +
                                 "&cp=5797C7865AD54E1&_="
                         , data.getNext().getMax_behot_time() + "", listView, refreshLayout));
-//                refreshLayout.setRefreshing(false);
             }
         });
 
+        //viewPager页面间的切换
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            //            RequestQueue requestQueue= Volley.newRequestQueue(getActivity());
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -140,7 +166,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
                     @Override
                     public void onRefresh() {
                         showNews(position, requestQueue, listView, refreshLayout);
-//                        refreshLayout.setRefreshing(false);
                     }
                 });
 
@@ -179,7 +204,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
         View view = mViewList.get(0);
         final ListView listView = (ListView) view.findViewById(R.id.lvNewsList);
         requestQueue.add(getNewsData("http://toutiao.com/api/article/recent/?source=2&category=video" +
-                "&as=A165472AB9D6F61" , "", listView));
+                "&as=A165472AB9D6F61", "", listView));
         final SwipeRefreshLayout refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srRefresh);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -236,13 +261,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
         String url = null;
         if (position == 4) {//段子的内容与其他不一样，单独处理
             url = "http://toutiao.com/api/article/recent/" +
-                    "?source=2&category=essay_joke&as=A1B5276908B3CCE" ;
+                    "?source=2&category=essay_joke&as=A1B5276908B3CCE";
             requestQueue.add(getJokeData(url, "", listView, refreshLayout));
         } else {
             switch (position) {
                 case 0:
                     url = "http://toutiao.com/api/article/recent/" +
-                            "?source=2&category=__all__&as=A105177907376A5" ;
+                            "?source=2&category=__all__&as=A105177907376A5";
                     break;
                 case 1:
                     url = "http://toutiao.com/api/article/recent/" +
@@ -250,7 +275,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
                     break;
                 case 2:
                     url = "http://toutiao.com/api/article/recent/" +
-                            "?source=2&category=video&as=A195A71998C3BBD" ;
+                            "?source=2&category=video&as=A195A71998C3BBD";
                     break;
                 case 3://社会
                     url = "http://toutiao.com/api/article/recent/" +
@@ -328,7 +353,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            System.out.println("Volley得到的response是+" + response.toString());
+//                            System.out.println("Volley得到的response是+" + response.toString());
                             Gson gson = new Gson();
                             data = gson.fromJson(response.toString(), new TypeToken<Data>() {
                             }.getType());
@@ -392,11 +417,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
                             newsList = data.getData();
                             System.out.println("newsList的size是" + newsList.size());
                             mNewsAdapter = new NewsAdapter(getActivity(), newsList);
+                            System.out.println("isFirstScroll是" + isFirstScroll);
+                            listView.setAdapter(mNewsAdapter);
+                            System.out.println("listView.getLastVisiblePosition()是" + listView.getLastVisiblePosition());
+
                             if (isFirstScroll) {
                                 mNewsAdapter.setLastPosition(listView.getLastVisiblePosition());
                                 isFirstScroll = false;
                             }
-                            listView.setAdapter(mNewsAdapter);
                             mNewsAdapter.notifyDataSetChanged();
 
                             final List<News> finalNewsList = newsList;
@@ -505,7 +533,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
     * 列表的滚动处理
     * */
     public class NewsListOnScrollListener implements AbsListView.OnScrollListener {
-
+        private int position;
         @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
             switch (scrollState) {
@@ -516,6 +544,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
                 case SCROLL_STATE_IDLE:
                     mNewsAdapter.setScroll(false);
                     mNewsAdapter.notifyDataSetChanged();
+                    mNewsAdapter.setScrollposition(position);
                     System.out.println("停止滚动");
                     break;
             }
@@ -523,7 +552,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
 
         @Override
         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
+            position=firstVisibleItem + visibleItemCount;
             mNewsAdapter.setStartPosition(firstVisibleItem);
             mNewsAdapter.setStopPosition(firstVisibleItem + visibleItemCount);
         }
@@ -569,5 +598,42 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
         return jsonObjectRequest;
     }
 
+    public class NetWorkChangeReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch (intent.getAction()){
+                case ConnectivityManager.CONNECTIVITY_ACTION:
+                    isConn(context);
+                    break;
+            }
+        }
+
+        public void isConn(Context context){
+            ConnectivityManager conManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo network = conManager.getActiveNetworkInfo();
+            if(network!=null){
+                if (!network.isAvailable()){
+                    Toast.makeText(context,"网络已断开，请检查网络",Toast.LENGTH_SHORT).show();
+                    mNetState=false;
+                }else if (!network.isConnectedOrConnecting()){
+                    Toast.makeText(context,"网络未连接或连接失败，请检查网络",Toast.LENGTH_SHORT).show();
+                    mNetState=false;
+                }else {
+                    switch (network.getType()) {
+                        case ConnectivityManager.TYPE_WIFI:
+                            Toast.makeText(context, "wifi网络已连接，请放心使用", Toast.LENGTH_SHORT).show();
+                            break;
+                        case ConnectivityManager.TYPE_MOBILE:
+                            Toast.makeText(context, "手机网络已连接，请注意流量使用，使用Wifi更流畅哦", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
+                    mNetState=true;
+                }
+            }else {
+                NetWorkState.showNoNetWorkDlg(context);
+                mNetState=false;
+            }
+        }
+    }
 
 }

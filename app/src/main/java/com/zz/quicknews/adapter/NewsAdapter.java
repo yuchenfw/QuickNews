@@ -42,6 +42,11 @@ public class NewsAdapter extends BaseAdapter {
     private int mStopPosition;
     private int mLastPosition;
     private boolean isFirstScroll;
+    private int mScrollposition;
+
+    public void setScrollposition(int scrollposition) {
+        mScrollposition = scrollposition;
+    }
 
     public void setScroll(boolean scroll) {
         isScroll = scroll;
@@ -115,21 +120,26 @@ public class NewsAdapter extends BaseAdapter {
         }
         News news = mNewsList.get(i);
 
+        System.out.println("mLastPosition"+mLastPosition);
+        System.out.println("mStartPosition"+mStartPosition);
+        System.out.println("mStopPosition"+mStopPosition);
 
         if (isFirstScroll) {
-            if (i < mLastPosition) {
+            System.out.println("if mLastPosition"+mLastPosition);
+            if (i < 5) {
                 setImage(news, viewHolder, false);
             }
             isFirstScroll = false;
         } else {
-//            setImage(news,viewHolder,isScroll);
-            System.out.println("isScroll是" + isScroll);
-            System.out.println("mStopPosition是" + mStopPosition);
-            if (!isScroll) {
+            if (!isScroll&&i>=mStartPosition&&i<=mStopPosition) {
                 setImage(news, viewHolder, isScroll);
             } else {
-                if (i >= mStopPosition) {
+                if (isScroll&&mScrollposition>=mStopPosition)
                     setImage(news, viewHolder, isScroll);
+            }
+            if (mStopPosition==0){
+                if (i < 5) {
+                    setImage(news, viewHolder, false);
                 }
             }
         }
@@ -167,57 +177,75 @@ public class NewsAdapter extends BaseAdapter {
             switch (imageUrlList.size()) {
                 case 0:
                     if (news.getLarge_image_url() != null) {
-                        viewHolder.mIvImage1.setVisibility(View.VISIBLE);
                         viewHolder.mIvImage2.setVisibility(View.GONE);
                         viewHolder.mIvImage3.setVisibility(View.GONE);
+                        viewHolder.mIvImage1.setVisibility(View.VISIBLE);
+//                        viewHolder.mIvImage1.setVisibility(View.INVISIBLE);
                         if (!isScrolled) {
                             viewHolder.mIvImage1.setTag(news.getLarge_image_url());
                             getImage(viewHolder.mIvImage1, viewHolder, news.getLarge_image_url(),
                                     news.getLarge_image_url());
                         } else {
-                            viewHolder.mIvImage1.setBackgroundColor(mContext.getResources().
-                                    getColor(R.color.darkgray2));
+//                            viewHolder.mIvImage1.setBackgroundColor(mContext.getResources().
+//                                    getColor(R.color.darkgray2));
+//                            viewHolder.mIvImage1.setBackgroundResource(R.drawable.default_picture);
                         }
                     } else {
                         viewHolder.mIvImage1.setVisibility(View.GONE);
                         viewHolder.mIvImage2.setVisibility(View.GONE);
                         viewHolder.mIvImage3.setVisibility(View.GONE);
                     }
+//                    viewHolder.mIvImage1.setVisibility(View.VISIBLE);
                     break;
                 case 1:
-                    viewHolder.mIvImage1.setVisibility(View.VISIBLE);
                     viewHolder.mIvImage2.setVisibility(View.GONE);
                     viewHolder.mIvImage3.setVisibility(View.GONE);
+                    viewHolder.mIvImage1.setVisibility(View.VISIBLE);
+//                    viewHolder.mIvImage1.setVisibility(View.INVISIBLE);
+
                     if (!isScrolled) {
                         viewHolder.mIvImage1.setTag(imageUrlList.get(0).getUrl());
                         getImage(viewHolder.mIvImage1, viewHolder, imageUrlList.get(0).getUrl(),
                                 news.getLarge_image_url());
                     } else {
-                        viewHolder.mIvImage1.setBackgroundColor(mContext.getResources().
-                                getColor(R.color.darkgray2));
+//                        viewHolder.mIvImage1.setBackgroundColor(mContext.getResources().
+//                                getColor(R.color.darkgray2));
+//                        viewHolder.mIvImage1.setBackgroundResource(R.drawable.default_picture);
+
                     }
+
+
                     break;
                 case 2:
+                    viewHolder.mIvImage3.setVisibility(View.GONE);
                     viewHolder.mIvImage1.setVisibility(View.VISIBLE);
                     viewHolder.mIvImage2.setVisibility(View.VISIBLE);
-                    viewHolder.mIvImage3.setVisibility(View.GONE);
+//                    viewHolder.mIvImage2.setVisibility(View.INVISIBLE);
+//                    viewHolder.mIvImage3.setVisibility(View.INVISIBLE);
+
                     if (!isScrolled) {
                         viewHolder.mIvImage1.setTag(imageUrlList.get(0).getUrl());
                         viewHolder.mIvImage2.setTag(imageUrlList.get(1).getUrl());
                         getImage(viewHolder.mIvImage1, viewHolder, imageUrlList.get(0).getUrl(), imageUrlList.get(0).getUrl());
                         getImage(viewHolder.mIvImage2, viewHolder, imageUrlList.get(1).getUrl(), imageUrlList.get(1).getUrl());
                     } else {
-                        viewHolder.mIvImage1.setBackgroundColor(mContext.getResources().
-                                getColor(R.color.darkgray2));
-                        viewHolder.mIvImage2.setBackgroundColor(mContext.getResources().
-                                getColor(R.color.darkgray2));
+//                        viewHolder.mIvImage1.setBackgroundColor(mContext.getResources().
+//                                getColor(R.color.darkgray2));
+//                        viewHolder.mIvImage2.setBackgroundColor(mContext.getResources().
+//                                getColor(R.color.darkgray2));
+//                        viewHolder.mIvImage1.setBackgroundResource(R.drawable.default_picture);
+//                        viewHolder.mIvImage2.setBackgroundResource(R.drawable.default_picture);
+
                     }
+
                     break;
                 case 3:
                     viewHolder.mIvImage1.setVisibility(View.VISIBLE);
                     viewHolder.mIvImage2.setVisibility(View.VISIBLE);
                     viewHolder.mIvImage3.setVisibility(View.VISIBLE);
-
+//                    viewHolder.mIvImage1.setVisibility(View.INVISIBLE);
+//                    viewHolder.mIvImage2.setVisibility(View.INVISIBLE);
+//                    viewHolder.mIvImage3.setVisibility(View.INVISIBLE);
                     if (!isScrolled) {
                         viewHolder.mIvImage1.setTag(imageUrlList.get(0).getUrl());
                         viewHolder.mIvImage2.setTag(imageUrlList.get(1).getUrl());
@@ -226,13 +254,20 @@ public class NewsAdapter extends BaseAdapter {
                         getImage(viewHolder.mIvImage2, viewHolder, imageUrlList.get(1).getUrl(), imageUrlList.get(1).getUrl());
                         getImage(viewHolder.mIvImage3, viewHolder, imageUrlList.get(2).getUrl(), imageUrlList.get(2).getUrl());
                     } else {
-                        viewHolder.mIvImage1.setBackgroundColor(mContext.getResources().
-                                getColor(R.color.darkgray2));
-                        viewHolder.mIvImage2.setBackgroundColor(mContext.getResources().
-                                getColor(R.color.darkgray2));
-                        viewHolder.mIvImage3.setBackgroundColor(mContext.getResources().
-                                getColor(R.color.darkgray2));
+
+//                        viewHolder.mIvImage1.setBackgroundColor(mContext.getResources().
+//                                getColor(R.color.darkgray2));
+//                        viewHolder.mIvImage2.setBackgroundColor(mContext.getResources().
+//                                getColor(R.color.darkgray2));
+//                        viewHolder.mIvImage3.setBackgroundColor(mContext.getResources().
+//                                getColor(R.color.darkgray2));
+//                        viewHolder.mIvImage1.setBackgroundResource(R.drawable.default_picture);
+//                        viewHolder.mIvImage2.setBackgroundResource(R.drawable.default_picture);
+//                        viewHolder.mIvImage3.setBackgroundResource(R.drawable.default_picture);
+
                     }
+
+
                     break;
                 default:
                     viewHolder.mIvImage1.setVisibility(View.GONE);

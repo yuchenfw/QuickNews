@@ -1,6 +1,5 @@
 package com.zz.quicknews.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -9,12 +8,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -29,11 +25,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.zz.quicknews.ListViewForScrollView;
+import com.zz.quicknews.view.ListViewForScrollView;
 import com.zz.quicknews.R;
 import com.zz.quicknews.adapter.CommentsAdapter;
-import com.zz.quicknews.adapter.NewsAdapter;
-import com.zz.quicknews.news.News;
 import com.zz.quicknews.news.comments.Comment;
 import com.zz.quicknews.news.comments.CommentsData;
 
