@@ -8,6 +8,7 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.zz.quicknews.BitmapCache;
 import com.zz.quicknews.R;
 import com.zz.quicknews.news.ImageUrl;
@@ -108,9 +110,12 @@ public class NewsAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             viewHolder.mTvNewsTitle = (TextView) view.findViewById(R.id.tvNewsTitle);
             viewHolder.mTvAbstract = (TextView) view.findViewById(R.id.tvAbstract);
-            viewHolder.mIvImage1 = (ImageView) view.findViewById(R.id.ivImage1);
+            viewHolder.mIvImage1 = (SimpleDraweeView) view.findViewById(R.id.ivImage1);
+            viewHolder.mIvImage2 = (SimpleDraweeView) view.findViewById(R.id.ivImage2);
+            viewHolder.mIvImage3 = (SimpleDraweeView) view.findViewById(R.id.ivImage3);
+            /*viewHolder.mIvImage1 = (ImageView) view.findViewById(R.id.ivImage1);
             viewHolder.mIvImage2 = (ImageView) view.findViewById(R.id.ivImage2);
-            viewHolder.mIvImage3 = (ImageView) view.findViewById(R.id.ivImage3);
+            viewHolder.mIvImage3 = (ImageView) view.findViewById(R.id.ivImage3);*/
             viewHolder.mTvSource = (TextView) view.findViewById(R.id.tvSource);
             viewHolder.mTvComments = (TextView) view.findViewById(R.id.tvComments);
             viewHolder.mTvTime = (TextView) view.findViewById(R.id.tvTime);
@@ -123,8 +128,8 @@ public class NewsAdapter extends BaseAdapter {
         System.out.println("mLastPosition"+mLastPosition);
         System.out.println("mStartPosition"+mStartPosition);
         System.out.println("mStopPosition"+mStopPosition);
-
-        if (isFirstScroll) {
+        setImage(news, viewHolder, false);
+        /*if (isFirstScroll) {
             System.out.println("if mLastPosition"+mLastPosition);
             if (i < 5) {
                 setImage(news, viewHolder, false);
@@ -142,8 +147,7 @@ public class NewsAdapter extends BaseAdapter {
                     setImage(news, viewHolder, false);
                 }
             }
-        }
-
+        }*/
 /*
 * 搜索新闻的关键字标记
 * */
@@ -167,13 +171,14 @@ public class NewsAdapter extends BaseAdapter {
 
         return view;
     }
-/*
-* 图片的设置与获取
-* */
+    /*
+    * 图片的设置与获取
+    * */
     private void setImage(News news, ViewHolder viewHolder, boolean isScrolled) {
         List<ImageUrl> imageUrlList = new ArrayList<>();
         imageUrlList = news.getImage_list();
         if (imageUrlList != null) {
+            Log.d("imageUrlList.size()",imageUrlList.size()+"");
             switch (imageUrlList.size()) {
                 case 0:
                     if (news.getLarge_image_url() != null) {
@@ -181,15 +186,18 @@ public class NewsAdapter extends BaseAdapter {
                         viewHolder.mIvImage3.setVisibility(View.GONE);
                         viewHolder.mIvImage1.setVisibility(View.VISIBLE);
 //                        viewHolder.mIvImage1.setVisibility(View.INVISIBLE);
-                        if (!isScrolled) {
-                            viewHolder.mIvImage1.setTag(news.getLarge_image_url());
+                        viewHolder.mIvImage1.setAspectRatio(2.0f);
+                        viewHolder.mIvImage1.setImageURI(news.getLarge_image_url());
+                        /*if (!isScrolled) {
+                            viewHolder.mIvImage1.setImageURI(news.getLarge_image_url());
+                            *//*viewHolder.mIvImage1.setTag(news.getLarge_image_url());
                             getImage(viewHolder.mIvImage1, viewHolder, news.getLarge_image_url(),
-                                    news.getLarge_image_url());
+                                    news.getLarge_image_url());*//*
                         } else {
 //                            viewHolder.mIvImage1.setBackgroundColor(mContext.getResources().
 //                                    getColor(R.color.darkgray2));
 //                            viewHolder.mIvImage1.setBackgroundResource(R.drawable.default_picture);
-                        }
+                        }*/
                     } else {
                         viewHolder.mIvImage1.setVisibility(View.GONE);
                         viewHolder.mIvImage2.setVisibility(View.GONE);
@@ -202,17 +210,20 @@ public class NewsAdapter extends BaseAdapter {
                     viewHolder.mIvImage3.setVisibility(View.GONE);
                     viewHolder.mIvImage1.setVisibility(View.VISIBLE);
 //                    viewHolder.mIvImage1.setVisibility(View.INVISIBLE);
+                    viewHolder.mIvImage1.setAspectRatio(2.0f);
+                    viewHolder.mIvImage1.setImageURI(imageUrlList.get(0).getUrl());
 
-                    if (!isScrolled) {
-                        viewHolder.mIvImage1.setTag(imageUrlList.get(0).getUrl());
+                    /*if (!isScrolled) {
+                        viewHolder.mIvImage1.setImageURI(imageUrlList.get(0).getUrl());
+                        *//*viewHolder.mIvImage1.setTag(imageUrlList.get(0).getUrl());
                         getImage(viewHolder.mIvImage1, viewHolder, imageUrlList.get(0).getUrl(),
-                                news.getLarge_image_url());
+                                news.getLarge_image_url());*//*
                     } else {
 //                        viewHolder.mIvImage1.setBackgroundColor(mContext.getResources().
 //                                getColor(R.color.darkgray2));
 //                        viewHolder.mIvImage1.setBackgroundResource(R.drawable.default_picture);
 
-                    }
+                    }*/
 
 
                     break;
@@ -222,12 +233,18 @@ public class NewsAdapter extends BaseAdapter {
                     viewHolder.mIvImage2.setVisibility(View.VISIBLE);
 //                    viewHolder.mIvImage2.setVisibility(View.INVISIBLE);
 //                    viewHolder.mIvImage3.setVisibility(View.INVISIBLE);
+                    viewHolder.mIvImage1.setAspectRatio(1.5f);
+                    viewHolder.mIvImage2.setAspectRatio(1.5f);
 
-                    if (!isScrolled) {
-                        viewHolder.mIvImage1.setTag(imageUrlList.get(0).getUrl());
+                    viewHolder.mIvImage1.setImageURI(imageUrlList.get(0).getUrl());
+                    viewHolder.mIvImage2.setImageURI(imageUrlList.get(1).getUrl());
+                    /*if (!isScrolled) {
+                        viewHolder.mIvImage1.setImageURI(imageUrlList.get(0).getUrl());
+                        viewHolder.mIvImage1.setImageURI(imageUrlList.get(1).getUrl());
+                        *//*viewHolder.mIvImage1.setTag(imageUrlList.get(0).getUrl());
                         viewHolder.mIvImage2.setTag(imageUrlList.get(1).getUrl());
                         getImage(viewHolder.mIvImage1, viewHolder, imageUrlList.get(0).getUrl(), imageUrlList.get(0).getUrl());
-                        getImage(viewHolder.mIvImage2, viewHolder, imageUrlList.get(1).getUrl(), imageUrlList.get(1).getUrl());
+                        getImage(viewHolder.mIvImage2, viewHolder, imageUrlList.get(1).getUrl(), imageUrlList.get(1).getUrl());*//*
                     } else {
 //                        viewHolder.mIvImage1.setBackgroundColor(mContext.getResources().
 //                                getColor(R.color.darkgray2));
@@ -236,7 +253,7 @@ public class NewsAdapter extends BaseAdapter {
 //                        viewHolder.mIvImage1.setBackgroundResource(R.drawable.default_picture);
 //                        viewHolder.mIvImage2.setBackgroundResource(R.drawable.default_picture);
 
-                    }
+                    }*/
 
                     break;
                 case 3:
@@ -246,13 +263,23 @@ public class NewsAdapter extends BaseAdapter {
 //                    viewHolder.mIvImage1.setVisibility(View.INVISIBLE);
 //                    viewHolder.mIvImage2.setVisibility(View.INVISIBLE);
 //                    viewHolder.mIvImage3.setVisibility(View.INVISIBLE);
-                    if (!isScrolled) {
-                        viewHolder.mIvImage1.setTag(imageUrlList.get(0).getUrl());
+                    viewHolder.mIvImage1.setAspectRatio(1.5f);
+                    viewHolder.mIvImage2.setAspectRatio(1.5f);
+                    viewHolder.mIvImage3.setAspectRatio(1.5f);
+                    viewHolder.mIvImage1.setImageURI(imageUrlList.get(0).getUrl());
+                    viewHolder.mIvImage2.setImageURI(imageUrlList.get(1).getUrl());
+                    viewHolder.mIvImage3.setImageURI(imageUrlList.get(2).getUrl());
+                   /* if (!isScrolled) {
+                        viewHolder.mIvImage1.setImageURI(imageUrlList.get(0).getUrl());
+                        viewHolder.mIvImage1.setImageURI(imageUrlList.get(1).getUrl());
+                        viewHolder.mIvImage1.setImageURI(imageUrlList.get(2).getUrl());
+
+                        *//*viewHolder.mIvImage1.setTag(imageUrlList.get(0).getUrl());
                         viewHolder.mIvImage2.setTag(imageUrlList.get(1).getUrl());
                         viewHolder.mIvImage3.setTag(imageUrlList.get(2).getUrl());
                         getImage(viewHolder.mIvImage1, viewHolder, imageUrlList.get(0).getUrl(), imageUrlList.get(0).getUrl());
                         getImage(viewHolder.mIvImage2, viewHolder, imageUrlList.get(1).getUrl(), imageUrlList.get(1).getUrl());
-                        getImage(viewHolder.mIvImage3, viewHolder, imageUrlList.get(2).getUrl(), imageUrlList.get(2).getUrl());
+                        getImage(viewHolder.mIvImage3, viewHolder, imageUrlList.get(2).getUrl(), imageUrlList.get(2).getUrl());*//*
                     } else {
 
 //                        viewHolder.mIvImage1.setBackgroundColor(mContext.getResources().
@@ -265,7 +292,7 @@ public class NewsAdapter extends BaseAdapter {
 //                        viewHolder.mIvImage2.setBackgroundResource(R.drawable.default_picture);
 //                        viewHolder.mIvImage3.setBackgroundResource(R.drawable.default_picture);
 
-                    }
+                    }*/
 
 
                     break;
@@ -319,9 +346,12 @@ public class NewsAdapter extends BaseAdapter {
     public static class ViewHolder {
         private TextView mTvNewsTitle;
         private TextView mTvAbstract;
-        private ImageView mIvImage1;
-        private ImageView mIvImage2;
-        private ImageView mIvImage3;
+        private SimpleDraweeView mIvImage1;
+        private SimpleDraweeView mIvImage2;
+        private SimpleDraweeView mIvImage3;
+        /* private ImageView mIvImage1;
+         private ImageView mIvImage2;
+         private ImageView mIvImage3;*/
         private TextView mTvSource;
         private TextView mTvComments;
         private TextView mTvTime;

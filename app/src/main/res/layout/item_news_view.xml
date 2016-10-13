@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:paddingBottom="10dp"
-              android:paddingTop="10dp"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <TextView
         android:id="@+id/tvNewsTitle"
         android:textColor="@color/black"
@@ -19,7 +20,30 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <ImageView
+        <com.facebook.drawee.view.SimpleDraweeView
+            fresco:placeholderImage="@drawable/default_picture"
+            android:id="@+id/ivImage1"
+            android:visibility="gone"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:paddingLeft="5dp"
+            fresco:placeholderImage="@drawable/default_picture"
+            android:id="@+id/ivImage2"
+            android:visibility="gone"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:paddingLeft="5dp"
+            fresco:placeholderImage="@drawable/default_picture"
+            android:id="@+id/ivImage3"
+            android:visibility="gone"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+        <!--<ImageView
             android:id="@+id/ivImage1"
             android:visibility="gone"
             android:layout_weight="1"
@@ -36,7 +60,7 @@
             android:visibility="gone"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="80dp"/>
+            android:layout_height="80dp"/>-->
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

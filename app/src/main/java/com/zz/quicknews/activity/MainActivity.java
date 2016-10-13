@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.zz.quicknews.NewsUtil;
 import com.zz.quicknews.R;
 import com.zz.quicknews.adapter.GridViewAdapter;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fresco.initialize(this);
         JPushInterface.init(this);
         System.out.println("JPushInterface.getRegistrationID");
         JPushInterface.init(getApplicationContext());
