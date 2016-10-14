@@ -1,19 +1,13 @@
 package com.zz.quicknews.fragment;
 
 import android.app.Fragment;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +15,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 
 import com.android.volley.RequestQueue;
@@ -31,7 +24,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.zz.quicknews.NetWorkState;
+import com.zz.quicknews.util.NetWorkState;
 import com.zz.quicknews.activity.NewsActivity;
 import com.zz.quicknews.R;
 import com.zz.quicknews.activity.SearchActivity;
@@ -62,9 +55,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
     private int mType;//首页/视频
     private boolean isFirstScroll = true;
     private NewsAdapter mNewsAdapter;
-    private boolean mNetState;//网络状态
-    private NetWorkChangeReceiver mNetReceiver;
 
+    private boolean mNetState;//网络状态
 
     @Nullable
     @Override
@@ -85,9 +77,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
                 showVideoFragment(inflater);
             }
         }
-        mNetReceiver=new NetWorkChangeReceiver();
-        IntentFilter filter=new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        getActivity().registerReceiver(mNetReceiver,filter);
 
         return view;
     }
@@ -104,10 +93,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (mNetReceiver!=null){
-            getActivity().unregisterReceiver(mNetReceiver);
-            mNetReceiver=null;
-        }
+
     }
 
     /*
@@ -598,42 +584,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
         return jsonObjectRequest;
     }
 
-    public class NetWorkChangeReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            switch (intent.getAction()){
-                case ConnectivityManager.CONNECTIVITY_ACTION:
-                    isConn(context);
-                    break;
-            }
-        }
 
-        public void isConn(Context context){
-            ConnectivityManager conManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo network = conManager.getActiveNetworkInfo();
-            if(network!=null){
-                if (!network.isAvailable()){
-                    Toast.makeText(context,"网络已断开，请检查网络",Toast.LENGTH_SHORT).show();
-                    mNetState=false;
-                }else if (!network.isConnectedOrConnecting()){
-                    Toast.makeText(context,"网络未连接或连接失败，请检查网络",Toast.LENGTH_SHORT).show();
-                    mNetState=false;
-                }else {
-                    switch (network.getType()) {
-                        case ConnectivityManager.TYPE_WIFI:
-                            Toast.makeText(context, "wifi网络已连接，请放心使用", Toast.LENGTH_SHORT).show();
-                            break;
-                        case ConnectivityManager.TYPE_MOBILE:
-                            Toast.makeText(context, "手机网络已连接，请注意流量使用，使用Wifi更流畅哦", Toast.LENGTH_SHORT).show();
-                            break;
-                    }
-                    mNetState=true;
-                }
-            }else {
-                NetWorkState.showNoNetWorkDlg(context);
-                mNetState=false;
-            }
-        }
-    }
 
 }

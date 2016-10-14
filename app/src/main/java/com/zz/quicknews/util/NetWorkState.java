@@ -1,4 +1,4 @@
-package com.zz.quicknews;
+package com.zz.quicknews.util;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,6 +8,8 @@ import android.net.NetworkInfo;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
+
+import com.zz.quicknews.R;
 
 /**
  * Created by yuchenfw on 2016/8/17.

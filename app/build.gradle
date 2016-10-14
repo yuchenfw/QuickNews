@@ -33,4 +33,11 @@ dependencies {
     compile project(':volley')
     compile files('libs/gson-2.6.2.jar')
     compile files('libs/jpush-android-2.1.7.jar')
+    compile 'com.facebook.fresco:fresco:0.12.0'
+    // 支持 GIF 动图，需要添加
+    compile 'com.facebook.fresco:animated-gif:0.12.0'
+
+    // 支持 WebP （静态图+动图），需要添加
+    compile 'com.facebook.fresco:animated-webp:0.12.0'
+    compile 'com.facebook.fresco:webpsupport:0.12.0'
 }

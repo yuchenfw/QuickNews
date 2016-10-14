@@ -5,15 +5,20 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.zz.quicknews.NewsUtil;
+import com.zz.quicknews.util.NetWorkState;
 import com.zz.quicknews.R;
 import com.zz.quicknews.adapter.GridViewAdapter;
 import com.zz.quicknews.fragment.HomeFragment;
@@ -23,6 +28,9 @@ import cn.jpush.android.api.JPushInterface;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private GridView mGvPage;
     public static boolean isForeground = false;
+
+    private boolean mNetState;//网络状态
+    private NetWorkChangeReceiver mNetReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +47,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         initView();
+
+
+        mNetReceiver=new NetWorkChangeReceiver();
+        IntentFilter filter=new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(mNetReceiver,filter);
+
 //        registerMessageReceiver();  // used for receive msg
 
     }
@@ -62,6 +76,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onDestroy() {
 //        unregisterReceiver(mMessageReceiver);
         super.onDestroy();
+        if (mNetReceiver!=null){
+            unregisterReceiver(mNetReceiver);
+            mNetReceiver=null;
+        }
     }
 
     public void initView() {
@@ -105,7 +123,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-   /* //for receive customer msg from jpush server
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus&& Build.VERSION.SDK_INT>=21){
+            View decorView=getWindow().getDecorView();
+            decorView.setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    |View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    |View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            );
+            getWindow().setNavigationBarColor(Color.TRANSPARENT);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
+    }
+    /* //for receive customer msg from jpush server
     private MessageReceiver mMessageReceiver;
     public static final String MESSAGE_RECEIVED_ACTION = "com.example.jpushdemo.MESSAGE_RECEIVED_ACTION";
     public static final String KEY_TITLE = "title";
@@ -138,7 +170,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 */
 
+    public class NetWorkChangeReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch (intent.getAction()){
+                case ConnectivityManager.CONNECTIVITY_ACTION:
+                    isConn(context);
+                    break;
+            }
+        }
 
+        public void isConn(Context context){
+            ConnectivityManager conManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo network = conManager.getActiveNetworkInfo();
+            if(network!=null){
+                if (!network.isAvailable()){
+                    Toast.makeText(context,"网络已断开，请检查网络",Toast.LENGTH_SHORT).show();
+                    mNetState=false;
+                }else if (!network.isConnectedOrConnecting()){
+                    Toast.makeText(context,"网络未连接或连接失败，请检查网络",Toast.LENGTH_SHORT).show();
+                    mNetState=false;
+                }else {
+                    switch (network.getType()) {
+                        case ConnectivityManager.TYPE_WIFI:
+                            Toast.makeText(context, "wifi网络已连接，请放心使用", Toast.LENGTH_SHORT).show();
+                            break;
+                        case ConnectivityManager.TYPE_MOBILE:
+                            Toast.makeText(context, "手机网络已连接，请注意流量使用，使用Wifi更流畅哦", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
+                    mNetState=true;
+                }
+            }else {
+                NetWorkState.showNoNetWorkDlg(context);
+                mNetState=false;
+            }
+        }
+    }
 
 
 }

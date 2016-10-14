@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <android.support.design.widget.TabLayout
+            android:paddingTop="16dp"
             android:id="@+id/title_tab"
             android:layout_weight="1"
             android:layout_width="0dp"
@@ -24,6 +25,7 @@
             android:id="@+id/ivSearch"
             android:src="@drawable/white_search_titlebar_press"
             android:gravity="center_vertical"
+            android:paddingTop="16dp"
             android:layout_width="40dp"
             android:layout_height="match_parent"/>
     </LinearLayout>

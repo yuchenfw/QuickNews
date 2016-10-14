@@ -128,7 +128,11 @@ public class NewsAdapter extends BaseAdapter {
         System.out.println("mLastPosition"+mLastPosition);
         System.out.println("mStartPosition"+mStartPosition);
         System.out.println("mStopPosition"+mStopPosition);
-        setImage(news, viewHolder, false);
+        if(isScroll){
+            setImage(news, viewHolder, true);
+        }else {
+            setImage(news, viewHolder, false);
+        }
         /*if (isFirstScroll) {
             System.out.println("if mLastPosition"+mLastPosition);
             if (i < 5) {
@@ -178,7 +182,7 @@ public class NewsAdapter extends BaseAdapter {
         List<ImageUrl> imageUrlList = new ArrayList<>();
         imageUrlList = news.getImage_list();
         if (imageUrlList != null) {
-            Log.d("imageUrlList.size()",imageUrlList.size()+"");
+//            Log.d("imageUrlList.size()",imageUrlList.size()+"");
             switch (imageUrlList.size()) {
                 case 0:
                     if (news.getLarge_image_url() != null) {
@@ -187,7 +191,9 @@ public class NewsAdapter extends BaseAdapter {
                         viewHolder.mIvImage1.setVisibility(View.VISIBLE);
 //                        viewHolder.mIvImage1.setVisibility(View.INVISIBLE);
                         viewHolder.mIvImage1.setAspectRatio(2.0f);
-                        viewHolder.mIvImage1.setImageURI(news.getLarge_image_url());
+                        if(!isScrolled){
+                            viewHolder.mIvImage1.setImageURI(news.getLarge_image_url());
+                        }
                         /*if (!isScrolled) {
                             viewHolder.mIvImage1.setImageURI(news.getLarge_image_url());
                             *//*viewHolder.mIvImage1.setTag(news.getLarge_image_url());
@@ -211,7 +217,9 @@ public class NewsAdapter extends BaseAdapter {
                     viewHolder.mIvImage1.setVisibility(View.VISIBLE);
 //                    viewHolder.mIvImage1.setVisibility(View.INVISIBLE);
                     viewHolder.mIvImage1.setAspectRatio(2.0f);
-                    viewHolder.mIvImage1.setImageURI(imageUrlList.get(0).getUrl());
+                    if(!isScrolled){
+                        viewHolder.mIvImage1.setImageURI(imageUrlList.get(0).getUrl());
+                    }
 
                     /*if (!isScrolled) {
                         viewHolder.mIvImage1.setImageURI(imageUrlList.get(0).getUrl());
@@ -235,9 +243,11 @@ public class NewsAdapter extends BaseAdapter {
 //                    viewHolder.mIvImage3.setVisibility(View.INVISIBLE);
                     viewHolder.mIvImage1.setAspectRatio(1.5f);
                     viewHolder.mIvImage2.setAspectRatio(1.5f);
+                    if(!isScrolled){
+                        viewHolder.mIvImage1.setImageURI(imageUrlList.get(0).getUrl());
+                        viewHolder.mIvImage2.setImageURI(imageUrlList.get(1).getUrl());
+                    }
 
-                    viewHolder.mIvImage1.setImageURI(imageUrlList.get(0).getUrl());
-                    viewHolder.mIvImage2.setImageURI(imageUrlList.get(1).getUrl());
                     /*if (!isScrolled) {
                         viewHolder.mIvImage1.setImageURI(imageUrlList.get(0).getUrl());
                         viewHolder.mIvImage1.setImageURI(imageUrlList.get(1).getUrl());
@@ -266,9 +276,12 @@ public class NewsAdapter extends BaseAdapter {
                     viewHolder.mIvImage1.setAspectRatio(1.5f);
                     viewHolder.mIvImage2.setAspectRatio(1.5f);
                     viewHolder.mIvImage3.setAspectRatio(1.5f);
-                    viewHolder.mIvImage1.setImageURI(imageUrlList.get(0).getUrl());
-                    viewHolder.mIvImage2.setImageURI(imageUrlList.get(1).getUrl());
-                    viewHolder.mIvImage3.setImageURI(imageUrlList.get(2).getUrl());
+                    if(!isScrolled){
+                        viewHolder.mIvImage1.setImageURI(imageUrlList.get(0).getUrl());
+                        viewHolder.mIvImage2.setImageURI(imageUrlList.get(1).getUrl());
+                        viewHolder.mIvImage3.setImageURI(imageUrlList.get(2).getUrl());
+                    }
+
                    /* if (!isScrolled) {
                         viewHolder.mIvImage1.setImageURI(imageUrlList.get(0).getUrl());
                         viewHolder.mIvImage1.setImageURI(imageUrlList.get(1).getUrl());
