@@ -1,18 +1,13 @@
 package com.zz.quicknews.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.support.v4.util.LruCache;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,7 +16,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.zz.quicknews.BitmapCache;
+import com.zz.quicknews.util.BitmapCache;
 import com.zz.quicknews.R;
 import com.zz.quicknews.news.ImageUrl;
 import com.zz.quicknews.news.News;
@@ -71,7 +66,6 @@ public class NewsAdapter extends BaseAdapter {
     public void setStopPosition(int stopPosition) {
         mStopPosition = stopPosition;
     }
-
     public NewsAdapter(Context context, List<News> newsList) {
         mContext = context;
         mNewsList = newsList;
@@ -125,9 +119,9 @@ public class NewsAdapter extends BaseAdapter {
         }
         News news = mNewsList.get(i);
 
-        System.out.println("mLastPosition"+mLastPosition);
+     /*   System.out.println("mLastPosition"+mLastPosition);
         System.out.println("mStartPosition"+mStartPosition);
-        System.out.println("mStopPosition"+mStopPosition);
+        System.out.println("mStopPosition"+mStopPosition);*/
         if(isScroll){
             setImage(news, viewHolder, true);
         }else {

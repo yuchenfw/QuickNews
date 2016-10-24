@@ -22,7 +22,7 @@ public class NetWorkState {
     }
 */
     public static boolean isConn(Context context){
-        boolean bisConnFlag=false;
+        boolean bisConnFlag;
         ConnectivityManager conManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo network = conManager.getActiveNetworkInfo();
         if(network!=null){
@@ -50,7 +50,6 @@ public class NetWorkState {
 
     /**
      * 当判断当前手机没有网络时选择是否打开网络设置
-     * @param context
      */
     public static void showNoNetWorkDlg(final Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -61,7 +60,7 @@ public class NetWorkState {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // 跳转到系统的网络设置界面
-                Intent intent = null;
+                Intent intent ;
                 // 先判断当前系统版本
                 if(android.os.Build.VERSION.SDK_INT > 10){  // 3.0以上
                     intent = new Intent(Settings.ACTION_WIFI_SETTINGS);

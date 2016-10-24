@@ -1,4 +1,4 @@
-package com.zz.quicknews;
+package com.zz.quicknews.util;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;

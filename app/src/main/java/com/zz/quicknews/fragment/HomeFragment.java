@@ -55,7 +55,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
     private int mType;//首页/视频
     private boolean isFirstScroll = true;
     private NewsAdapter mNewsAdapter;
-
+    private int mNewsType=1;//1.新闻  2.视频   3.段子   4.图片
     private boolean mNetState;//网络状态
 
     @Nullable
@@ -249,6 +249,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
             url = "http://toutiao.com/api/article/recent/" +
                     "?source=2&category=essay_joke&as=A1B5276908B3CCE";
             requestQueue.add(getJokeData(url, "", listView, refreshLayout));
+            mNewsType=3;
         } else {
             switch (position) {
                 case 0:
@@ -284,6 +285,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
 
 
             }
+            mNewsType=1;
             requestQueue.add(getNewsData(url, "", listView, refreshLayout));
         }
     }
@@ -343,7 +345,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
                             Gson gson = new Gson();
                             data = gson.fromJson(response.toString(), new TypeToken<Data>() {
                             }.getType());
-                            List<News> newsList = new ArrayList<>();
+                            List<News> newsList ;
                             newsList = data.getData();
 
                             refreshLayout.setRefreshing(false);
@@ -399,7 +401,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
                             Gson gson = new Gson();
                             data = gson.fromJson(response.toString(), new TypeToken<Data>() {
                             }.getType());
-                            List<News> newsList = new ArrayList<>();
+                            List<News> newsList ;
                             newsList = data.getData();
                             System.out.println("newsList的size是" + newsList.size());
                             mNewsAdapter = new NewsAdapter(getActivity(), newsList);
@@ -451,11 +453,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Intent intent = new Intent(getActivity(), NewsActivity.class);
-        System.out.println("i的位置" + i);
-        System.out.println("newsList的size" + newsList.size());
-        System.out.println("newsList.get(i).getDisplay_url()" + newsList.get(i).getDisplay_url());
-        intent.putExtra("news_url", newsList.get(i).getDisplay_url());
-        startActivity(intent);
+        switch (mNewsType){
+           case 3:
+
+               System.out.println("i的位置" + i);
+               System.out.println("newsList的size" + newsList.size());
+               System.out.println("newsList.get(i).getDisplay_url()" + newsList.get(i).getDisplay_url());
+               intent.putExtra("news_url", newsList.get(i).getDisplay_url());
+               startActivity(intent);
+               break;
+           default:
+               System.out.println("i的位置" + i);
+               System.out.println("newsList的size" + newsList.size());
+               System.out.println("newsList.get(i).getDisplay_url()" + newsList.get(i).getDisplay_url());
+               intent.putExtra("news_url", newsList.get(i).getDisplay_url());
+               startActivity(intent);
+               break;
+
+       }
+
     }
 
     @Override
@@ -475,7 +491,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
         private List<View> mViewList;
         private String[] title;
 
-        public HomePagerAdapter(List<View> viewList, String[] title) {
+        HomePagerAdapter(List<View> viewList, String[] title) {
             mViewList = viewList;
             this.title = title;
         }
@@ -564,8 +580,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
                             JokeAdapter adapter = new JokeAdapter(getActivity(), jokeList);
                             listView.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
-
-
+                            final List<Joke> finalJokeList=jokeList;
+                            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    Intent intent = new Intent(getActivity(), NewsActivity.class);
+                                    System.out.println("i的位置" + position);
+                                    System.out.println("newsList的size" + finalJokeList.size());
+                                    System.out.println("newsList.get(i).getDisplay_url()" + finalJokeList.get(position).getGroup().getShare_url());
+                                    intent.putExtra("news_url", finalJokeList.get(position).getGroup().getShare_url());
+                                    startActivity(intent);
+                                }
+                            });
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

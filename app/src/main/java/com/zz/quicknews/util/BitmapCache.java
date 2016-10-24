@@ -1,4 +1,4 @@
-package com.zz.quicknews;
+package com.zz.quicknews.util;
 
 import android.graphics.Bitmap;
 import android.support.v4.util.LruCache;

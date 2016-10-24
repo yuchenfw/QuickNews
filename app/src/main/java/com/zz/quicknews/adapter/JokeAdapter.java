@@ -52,13 +52,17 @@ public class JokeAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
+
         Joke joke = mJokeList.get(i);
         if (joke.getGroup() != null) {
             viewHolder.mTvJokeAuthor.setText(joke.getGroup().getUser().getName());
             viewHolder.mTvJokeContent.setText(joke.getGroup().getText());
         }
-        if (joke.getComments() != null && joke.getComments().size() != 0)
+        if (joke.getComments() != null && joke.getComments().size() != 0) {
             viewHolder.mTvPopularComments.setText(joke.getComments().get(0).getText());
+        } else {
+            viewHolder.mTvPopularComments.setText("");
+        }
         return view;
     }
 

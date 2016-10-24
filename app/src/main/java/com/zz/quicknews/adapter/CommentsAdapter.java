@@ -10,8 +10,7 @@ import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.Volley;
-import com.zz.quicknews.BitmapCache;
+import com.zz.quicknews.util.BitmapCache;
 import com.zz.quicknews.R;
 import com.zz.quicknews.news.comments.Comment;
 

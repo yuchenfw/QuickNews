@@ -1,4 +1,4 @@
-package com.zz.quicknews;
+package com.zz.quicknews.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
