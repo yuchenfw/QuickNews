@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.zz.quicknews.R;
 
 /**
- * Created by pc on 2016/7/26.
+ * Created by yuchenfw on 2016/7/26.
  */
 public class GridViewAdapter extends BaseAdapter {
     private Context mContext;

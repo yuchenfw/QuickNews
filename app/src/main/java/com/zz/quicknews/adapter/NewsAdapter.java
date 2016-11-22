@@ -66,6 +66,7 @@ public class NewsAdapter extends BaseAdapter {
     public void setStopPosition(int stopPosition) {
         mStopPosition = stopPosition;
     }
+
     public NewsAdapter(Context context, List<News> newsList) {
         mContext = context;
         mNewsList = newsList;
@@ -122,9 +123,9 @@ public class NewsAdapter extends BaseAdapter {
      /*   System.out.println("mLastPosition"+mLastPosition);
         System.out.println("mStartPosition"+mStartPosition);
         System.out.println("mStopPosition"+mStopPosition);*/
-        if(isScroll){
+        if (isScroll) {
             setImage(news, viewHolder, true);
-        }else {
+        } else {
             setImage(news, viewHolder, false);
         }
         /*if (isFirstScroll) {
@@ -169,6 +170,7 @@ public class NewsAdapter extends BaseAdapter {
 
         return view;
     }
+
     /*
     * 图片的设置与获取
     * */
@@ -185,7 +187,7 @@ public class NewsAdapter extends BaseAdapter {
                         viewHolder.mIvImage1.setVisibility(View.VISIBLE);
 //                        viewHolder.mIvImage1.setVisibility(View.INVISIBLE);
                         viewHolder.mIvImage1.setAspectRatio(2.0f);
-                        if(!isScrolled){
+                        if (!isScrolled) {
                             viewHolder.mIvImage1.setImageURI(news.getLarge_image_url());
                         }
                         /*if (!isScrolled) {
@@ -211,7 +213,7 @@ public class NewsAdapter extends BaseAdapter {
                     viewHolder.mIvImage1.setVisibility(View.VISIBLE);
 //                    viewHolder.mIvImage1.setVisibility(View.INVISIBLE);
                     viewHolder.mIvImage1.setAspectRatio(2.0f);
-                    if(!isScrolled){
+                    if (!isScrolled) {
                         viewHolder.mIvImage1.setImageURI(imageUrlList.get(0).getUrl());
                     }
 
@@ -237,7 +239,7 @@ public class NewsAdapter extends BaseAdapter {
 //                    viewHolder.mIvImage3.setVisibility(View.INVISIBLE);
                     viewHolder.mIvImage1.setAspectRatio(1.5f);
                     viewHolder.mIvImage2.setAspectRatio(1.5f);
-                    if(!isScrolled){
+                    if (!isScrolled) {
                         viewHolder.mIvImage1.setImageURI(imageUrlList.get(0).getUrl());
                         viewHolder.mIvImage2.setImageURI(imageUrlList.get(1).getUrl());
                     }
@@ -270,7 +272,7 @@ public class NewsAdapter extends BaseAdapter {
                     viewHolder.mIvImage1.setAspectRatio(1.5f);
                     viewHolder.mIvImage2.setAspectRatio(1.5f);
                     viewHolder.mIvImage3.setAspectRatio(1.5f);
-                    if(!isScrolled){
+                    if (!isScrolled) {
                         viewHolder.mIvImage1.setImageURI(imageUrlList.get(0).getUrl());
                         viewHolder.mIvImage2.setImageURI(imageUrlList.get(1).getUrl());
                         viewHolder.mIvImage3.setImageURI(imageUrlList.get(2).getUrl());

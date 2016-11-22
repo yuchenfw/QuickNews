@@ -8,6 +8,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,8 +56,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
     private int mType;//首页/视频
     private boolean isFirstScroll = true;
     private NewsAdapter mNewsAdapter;
-    private int mNewsType=1;//1.新闻  2.视频   3.段子   4.图片
-    private boolean mNetState;//网络状态
+    private int mNewsType = 1;//1.新闻  2.视频   3.段子   4.图片
+//    private boolean mNetState;//网络状态
 
     @Nullable
     @Override
@@ -69,8 +70,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
         if (getArguments() != null) {
             mType = getArguments().getInt("TYPE");
         }
-        mNetState= NetWorkState.isConn(getActivity());
-        if (mNetState) {
+//        mNetState= NetWorkState.isConn(getActivity());
+        Log.e("MainActivity:  ", NetWorkState.mNetState + "");
+
+        if (NetWorkState.mNetState) {
             if (mType == 0) {
                 showFragment(inflater);
             } else if (mType == 1) {
@@ -249,7 +252,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
             url = "http://toutiao.com/api/article/recent/" +
                     "?source=2&category=essay_joke&as=A1B5276908B3CCE";
             requestQueue.add(getJokeData(url, "", listView, refreshLayout));
-            mNewsType=3;
+            mNewsType = 3;
         } else {
             switch (position) {
                 case 0:
@@ -285,7 +288,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
 
 
             }
-            mNewsType=1;
+            mNewsType = 1;
             requestQueue.add(getNewsData(url, "", listView, refreshLayout));
         }
     }
@@ -345,7 +348,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
                             Gson gson = new Gson();
                             data = gson.fromJson(response.toString(), new TypeToken<Data>() {
                             }.getType());
-                            List<News> newsList ;
+                            List<News> newsList;
                             newsList = data.getData();
 
                             refreshLayout.setRefreshing(false);
@@ -401,7 +404,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
                             Gson gson = new Gson();
                             data = gson.fromJson(response.toString(), new TypeToken<Data>() {
                             }.getType());
-                            List<News> newsList ;
+                            List<News> newsList;
                             newsList = data.getData();
                             System.out.println("newsList的size是" + newsList.size());
                             mNewsAdapter = new NewsAdapter(getActivity(), newsList);
@@ -453,24 +456,24 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Intent intent = new Intent(getActivity(), NewsActivity.class);
-        switch (mNewsType){
-           case 3:
+        switch (mNewsType) {
+            case 3:
 
-               System.out.println("i的位置" + i);
-               System.out.println("newsList的size" + newsList.size());
-               System.out.println("newsList.get(i).getDisplay_url()" + newsList.get(i).getDisplay_url());
-               intent.putExtra("news_url", newsList.get(i).getDisplay_url());
-               startActivity(intent);
-               break;
-           default:
-               System.out.println("i的位置" + i);
-               System.out.println("newsList的size" + newsList.size());
-               System.out.println("newsList.get(i).getDisplay_url()" + newsList.get(i).getDisplay_url());
-               intent.putExtra("news_url", newsList.get(i).getDisplay_url());
-               startActivity(intent);
-               break;
+                System.out.println("i的位置" + i);
+                System.out.println("newsList的size" + newsList.size());
+                System.out.println("newsList.get(i).getDisplay_url()" + newsList.get(i).getDisplay_url());
+                intent.putExtra("news_url", newsList.get(i).getDisplay_url());
+                startActivity(intent);
+                break;
+            default:
+                System.out.println("i的位置" + i);
+                System.out.println("newsList的size" + newsList.size());
+                System.out.println("newsList.get(i).getDisplay_url()" + newsList.get(i).getDisplay_url());
+                intent.putExtra("news_url", newsList.get(i).getDisplay_url());
+                startActivity(intent);
+                break;
 
-       }
+        }
 
     }
 
@@ -536,6 +539,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
     * */
     public class NewsListOnScrollListener implements AbsListView.OnScrollListener {
         private int position;
+
         @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
             switch (scrollState) {
@@ -554,7 +558,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
 
         @Override
         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-            position=firstVisibleItem + visibleItemCount;
+            position = firstVisibleItem + visibleItemCount;
             mNewsAdapter.setStartPosition(firstVisibleItem);
             mNewsAdapter.setStopPosition(firstVisibleItem + visibleItemCount);
         }
@@ -580,7 +584,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
                             JokeAdapter adapter = new JokeAdapter(getActivity(), jokeList);
                             listView.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
-                            final List<Joke> finalJokeList=jokeList;
+                            final List<Joke> finalJokeList = jokeList;
                             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -609,7 +613,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
         System.out.println("jsonObjectRequest" + jsonObjectRequest.toString());
         return jsonObjectRequest;
     }
-
 
 
 }

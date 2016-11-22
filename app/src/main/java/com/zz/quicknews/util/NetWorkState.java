@@ -21,8 +21,10 @@ public class NetWorkState {
         mContext = context;
     }
 */
+    public  static  boolean mNetState=false;
+
     public static boolean isConn(Context context){
-        boolean bisConnFlag;
+        boolean bisConnFlag=false;
         ConnectivityManager conManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo network = conManager.getActiveNetworkInfo();
         if(network!=null){
@@ -31,16 +33,18 @@ public class NetWorkState {
             }else if (!network.isConnectedOrConnecting()){
                 Toast.makeText(context,"当前网络未连接或连接失败，请检查网络",Toast.LENGTH_SHORT).show();
             }else {
-                switch (network.getType()) {
-                    case ConnectivityManager.TYPE_WIFI:
-                        Toast.makeText(context, "您当前处于wifi网络，请放心使用", Toast.LENGTH_SHORT).show();
-                        break;
-                    case ConnectivityManager.TYPE_MOBILE:
-                        Toast.makeText(context, "您当前处于手机网络，请注意流量使用，使用Wifi更流畅哦", Toast.LENGTH_SHORT).show();
-                        break;
+                bisConnFlag=conManager.getActiveNetworkInfo().isAvailable();
+                if (bisConnFlag!=mNetState) {
+                    switch (network.getType()) {
+                        case ConnectivityManager.TYPE_WIFI:
+                            Toast.makeText(context, "您当前处于wifi网络，请放心使用", Toast.LENGTH_SHORT).show();
+                            break;
+                        case ConnectivityManager.TYPE_MOBILE:
+                            Toast.makeText(context, "您当前处于手机网络，请注意流量使用，使用Wifi更流畅哦", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
                 }
             }
-            bisConnFlag=conManager.getActiveNetworkInfo().isAvailable();
         }else {
             showNoNetWorkDlg(context);
             bisConnFlag=false;

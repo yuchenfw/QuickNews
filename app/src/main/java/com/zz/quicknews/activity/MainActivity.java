@@ -12,6 +12,7 @@ import android.os.Build;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -29,7 +30,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private GridView mGvPage;
     public static boolean isForeground = false;
 
-    private boolean mNetState;//网络状态
+    //    private boolean mNetState;//网络状态
+//    public static boolean mNetState;//网络状态
     private NetWorkChangeReceiver mNetReceiver;
 
     @Override
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         System.out.println("JPushInterface.getRegistrationID");
         JPushInterface.init(getApplicationContext());
         String rid = JPushInterface.getRegistrationID(getApplicationContext());
-        System.out.println("JPushInterface.getRegistrationID"+rid);
+        System.out.println("JPushInterface.getRegistrationID" + rid);
         setContentView(R.layout.activity_main);
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
@@ -49,9 +51,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initView();
 
 
-        mNetReceiver=new NetWorkChangeReceiver();
-        IntentFilter filter=new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(mNetReceiver,filter);
+        mNetReceiver = new NetWorkChangeReceiver();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(mNetReceiver, filter);
+        NetWorkState.mNetState = NetWorkState.isConn(MainActivity.this);
+
 
 //        registerMessageReceiver();  // used for receive msg
 
@@ -76,9 +80,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onDestroy() {
 //        unregisterReceiver(mMessageReceiver);
         super.onDestroy();
-        if (mNetReceiver!=null){
+        if (mNetReceiver != null) {
             unregisterReceiver(mNetReceiver);
-            mNetReceiver=null;
+            mNetReceiver = null;
         }
     }
 
@@ -126,12 +130,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus&& Build.VERSION.SDK_INT>=21){
-            View decorView=getWindow().getDecorView();
+        if (hasFocus && Build.VERSION.SDK_INT >= 21) {
+            View decorView = getWindow().getDecorView();
             decorView.setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    |View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    |View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
             );
             getWindow().setNavigationBarColor(Color.TRANSPARENT);
             getWindow().setStatusBarColor(Color.TRANSPARENT);
@@ -173,14 +177,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public class NetWorkChangeReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            switch (intent.getAction()){
+            switch (intent.getAction()) {
                 case ConnectivityManager.CONNECTIVITY_ACTION:
-                    isConn(context);
+//                    isConn(context);
+                    boolean state;
+                    NetWorkState.mNetState = NetWorkState.isConn(MainActivity.this);
+                    Log.e("mNetState:  ", NetWorkState.mNetState + "");
                     break;
             }
         }
 
-        public void isConn(Context context){
+       /* public void isConn(Context context){
             ConnectivityManager conManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo network = conManager.getActiveNetworkInfo();
             if(network!=null){
@@ -205,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 NetWorkState.showNoNetWorkDlg(context);
                 mNetState=false;
             }
-        }
+        }*/
     }
 
 
