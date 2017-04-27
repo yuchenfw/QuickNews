@@ -545,13 +545,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
             switch (scrollState) {
                 case SCROLL_STATE_TOUCH_SCROLL:
                     mNewsAdapter.setScroll(true);
-                    System.out.println("开始滚动");
+//                    System.out.println("开始滚动");
                     break;
                 case SCROLL_STATE_IDLE:
                     mNewsAdapter.setScroll(false);
                     mNewsAdapter.notifyDataSetChanged();
                     mNewsAdapter.setScrollposition(position);
-                    System.out.println("停止滚动");
+//                    System.out.println("停止滚动");
                     break;
             }
         }

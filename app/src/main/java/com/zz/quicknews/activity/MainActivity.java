@@ -3,6 +3,7 @@ package com.zz.quicknews.activity;
 import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -10,9 +11,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -25,6 +28,8 @@ import com.zz.quicknews.adapter.GridViewAdapter;
 import com.zz.quicknews.fragment.HomeFragment;
 
 import cn.jpush.android.api.JPushInterface;
+
+import static android.view.KeyEvent.KEYCODE_BACK;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private GridView mGvPage;
@@ -141,6 +146,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode==KEYCODE_BACK){
+            AlertDialog.Builder builder=new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle("提示");
+            builder.setMessage("确定退出吗");
+            builder.setPositiveButton("是的", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();;
+                }
+            });
+
+            builder.setNegativeButton("不", null);
+            builder.create();
+            builder.show();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     /* //for receive customer msg from jpush server
     private MessageReceiver mMessageReceiver;
     public static final String MESSAGE_RECEIVED_ACTION = "com.example.jpushdemo.MESSAGE_RECEIVED_ACTION";

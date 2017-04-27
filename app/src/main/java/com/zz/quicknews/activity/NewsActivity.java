@@ -93,7 +93,7 @@ public class NewsActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
 //                NewsActivity.this.setTitle("加载中，请稍后...");
-                System.out.println("newProgress是"+newProgress);
+//                System.out.println("newProgress是"+newProgress);
                 if(newProgress == 100) {
 //                    mRequestQueue.add(getCommentsData(url,0+"",10+"",mLsCommentList));
 
@@ -269,5 +269,6 @@ public class NewsActivity extends AppCompatActivity implements View.OnClickListe
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
     }
+
 
 }
